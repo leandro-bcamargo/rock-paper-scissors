@@ -6,7 +6,7 @@ function getComputerChoice() {
 }
 
 function formatSelection(selection) {
-  return selection.slice(0, 1).toUpperCase() + selection.slice(1);
+  return selection.slice(0, 1).toUpperCase() + selection.slice(1).toLowerCase();
 }
 
 function formatMessages(playerSelection, computerSelection) {
@@ -25,6 +25,8 @@ function formatMessages(playerSelection, computerSelection) {
 }
 
 function getResult(playerSelection, computerSelection, winMsg, loseMsg, tieMsg) {
+  playerSelection = playerSelection.toLowerCase();
+  computerSelection = computerSelection.toLowerCase();
   if (playerSelection === 'rock') {
     if (computerSelection === 'scissors') {
       return winMsg;
@@ -58,8 +60,6 @@ function getResult(playerSelection, computerSelection, winMsg, loseMsg, tieMsg) 
 
 
 function playRound(playerSelection, computerSelection) {
-  playerSelection = playerSelection.toLowerCase();
-  computerSelection = computerSelection.toLowerCase();
   const {winMsg, loseMsg, tieMsg} = formatMessages(playerSelection, computerSelection);
   return getResult(playerSelection, computerSelection, winMsg, loseMsg, tieMsg);
 }
