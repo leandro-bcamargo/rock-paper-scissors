@@ -64,22 +64,76 @@ function playRound(playerSelection, computerSelection) {
   return getResult(playerSelection, computerSelection, winMsg, loseMsg, tieMsg);
 }
 
-function playGame() {
-  let playerScore = computerScore = 0;
-  for (let i = 0; i < 5; i++) {
-    const playerSelection = prompt('Pick between rock, paper and scissors.');
-    const computerSelection = getComputerChoice();
-    const { winMsg, loseMsg } = formatMessages(playerSelection, computerSelection);
-    const result = playRound(playerSelection, computerSelection);
-    console.log(result);
-    if (result === winMsg) playerScore++;
-    if (result === loseMsg) computerScore++;
-  }
-  console.log(
-`The final score is:
-Player score: ${playerScore}
-Computer score: ${computerScore}
-`);
+// const defaultScore = {
+//   playerScore: 0,
+//   computerScore: 0,
+// }
+
+const actualScore = {
+  playerScore: 0,
+  computerScore: 0,
 }
 
-playGame();
+function declareWinner(winner) {
+
+  return winner === 'player' ? 'Player has reached 5 points and won the match!' : 'Computer has reached 5 points and won the match!'
+}
+
+function resetScores() {
+  actualScore.playerScore = 0;
+  actualScore.computerScore = 0;
+  playerScoreSpan.textContent = actualScore.playerScore;
+  computerScoreSpan.textContent = actualScore.computerScore;
+}
+
+function setScores() {
+  playerScoreSpan.textContent = actualScore.playerScore;
+  computerScoreSpan.textContent = actualScore.computerScore;
+}
+
+function playGame(playerSelection) {
+  const computerSelection = getComputerChoice();
+  const { winMsg, loseMsg, tieMsg } = formatMessages(playerSelection, computerSelection);
+  const result = playRound(playerSelection, computerSelection);
+  switch(true) {
+    case (result.includes('win')):      
+      playDescription.textContent = winMsg;
+      actualScore.playerScore++;
+      console.log('actualScore:', actualScore)
+      setScores();
+      break;
+    case (result.includes('lose')):
+      playDescription.textContent = loseMsg;
+      actualScore.computerScore++;
+      setScores();
+      break;
+    default:
+      playDescription.textContent = tieMsg;
+  }
+  const winner = document.querySelector('#winner');
+  if (actualScore.playerScore >= 5) {
+    winner.textContent = declareWinner('player');
+    resetScores();
+  } 
+  if (actualScore.computerScore >= 5) {
+    winner.textContent = declareWinner('computer');
+    resetScores();
+  }
+}
+
+const rockBtn = document.querySelector('#rock');
+const paperBtn = document.querySelector('#paper');
+const scissorsBtn = document.querySelector('#scissors');
+const resetScoreBtn = document.querySelector('#resetScore');
+const results = document.querySelector('#results');
+const playerScoreSpan = document.querySelector('#playerScore');
+const computerScoreSpan = document.querySelector('#computerScore');
+const playDescription = document.querySelector('#playDescription')
+
+rockBtn.addEventListener('click', () => playGame('rock'))
+paperBtn.addEventListener('click', () => playGame('paper'))
+scissorsBtn.addEventListener('click', () => playGame('scissors'))
+
+
+
+// playGame();
